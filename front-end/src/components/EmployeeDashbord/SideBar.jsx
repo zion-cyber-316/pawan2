@@ -16,36 +16,9 @@ import axios from 'axios';
 const SideBar = () => {
 
 
-const { user, serverLink } = useAuth();
 
-  const [employee, setEmployee] = useState([]);
-  const [workeraccess, setWorkeraccess] = useState([]);
 
-  useEffect(() => {
-
-    // ⛔ jab tak user load na ho
-    if (!user || !user._id) return;
-
-    const fetchEmp = async () => {
-      try {
-        console.log("Calling API with ID:", user._id);
-
-        const res = await axios.get(
-          `${serverLink}/api/employee/userId/${user._id}`
-        );
-
-        setEmployee(res.data.employees.purchaseaccess);
-        setWorkeraccess(res.data.employees.workeraccess);
-
-      } catch (error) {
-        console.error("Error fetching employee:", error);
-      }
-    };
-
-    fetchEmp();
-
-  }, [user, serverLink]);
-
+  
 
 
   return (
@@ -70,11 +43,11 @@ const { user, serverLink } = useAuth();
 
     
 
-         {user && user._id && (<NavLink to= {`/employee-dashbord/profile/${user._id}`}
+         (<NavLink to= {`/employee-dashbord/profile/${user._id}`}
           className={ ({ isActive }) => `${isActive ? "bg-teal-500 " : " "}   flex items-center space-x-4 block py-2.5 px-4 rounded`}>
           <FaUsers />
           <span>My Profle</span>
-        </NavLink>) }
+        </NavLink>) 
 
     <NavLink to="/employee-dashbord/leaves"
           className={({ isActive }) => `${isActive ? "bg-teal-500 " : " "}  flex items-center space-x-4 block py-2.5 px-4 rounded`}>
@@ -98,27 +71,27 @@ const { user, serverLink } = useAuth();
           <span>Salary</span>
         </NavLink>
 
- {employee == "Allowed" ? ( <NavLink to="/employee-dashbord/purchase"
+( <NavLink to="/employee-dashbord/purchase"
           className={({ isActive }) => `${isActive ? "bg-teal-500 " : " "}  flex items-center space-x-4 block py-2.5 px-4 rounded`}>
           < GiMoneyStack />
           <span> Purchase </span>
-        </NavLink>) :" " } 
+        </NavLink>) 
         
    
         
 
- {workeraccess == "Allowed" ? ( <NavLink to={`/employee-dashbord/workers`}
+ ( <NavLink to={`/employee-dashbord/workers`}
            className={ ({ isActive }) => `${isActive ? "bg-teal-500 " : " "}   flex items-center space-x-4 block py-2.5 px-4 rounded`}>
           <IoIosPeople />
           <span>Workers</span>
-        </NavLink>) : ""}
+        </NavLink>) 
 
 
- {workeraccess == "Allowed" ? (<NavLink to={`/employee-dashbord/workers-attendance`}
+ (<NavLink to={`/employee-dashbord/workers-attendance`}
            className={ ({ isActive }) => `${isActive ? "bg-teal-500 " : " "}   flex items-center space-x-4 block py-2.5 px-4 rounded`}>
           <FaCalendarAlt />
           <span>Workers-Attendance</span>
-        </NavLink>) :""}
+        </NavLink>) 
 
 
         <NavLink to="/employee-dashbord/setting"
@@ -135,78 +108,6 @@ const { user, serverLink } = useAuth();
 }
 
 export default SideBar
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
