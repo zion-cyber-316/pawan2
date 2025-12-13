@@ -14,7 +14,7 @@ import axios from 'axios';
 
 
 const SideBar = () => {
-
+const {user} = useAuth()
 
 
 
@@ -43,11 +43,11 @@ const SideBar = () => {
 
     
 
-         (<NavLink to= {`/employee-dashbord/profile/${user._id}`}
+         <NavLink to= {`/employee-dashbord/profile/${user._id}`}
           className={ ({ isActive }) => `${isActive ? "bg-teal-500 " : " "}   flex items-center space-x-4 block py-2.5 px-4 rounded`}>
           <FaUsers />
           <span>My Profle</span>
-        </NavLink>) 
+        </NavLink>
 
     <NavLink to="/employee-dashbord/leaves"
           className={({ isActive }) => `${isActive ? "bg-teal-500 " : " "}  flex items-center space-x-4 block py-2.5 px-4 rounded`}>
@@ -71,27 +71,27 @@ const SideBar = () => {
           <span>Salary</span>
         </NavLink>
 
-( <NavLink to="/employee-dashbord/purchase"
+ <NavLink to="/employee-dashbord/purchase"
           className={({ isActive }) => `${isActive ? "bg-teal-500 " : " "}  flex items-center space-x-4 block py-2.5 px-4 rounded`}>
           < GiMoneyStack />
           <span> Purchase </span>
-        </NavLink>) 
+        </NavLink>
         
    
         
 
- ( <NavLink to={`/employee-dashbord/workers`}
+  <NavLink to={`/employee-dashbord/workers`}
            className={ ({ isActive }) => `${isActive ? "bg-teal-500 " : " "}   flex items-center space-x-4 block py-2.5 px-4 rounded`}>
           <IoIosPeople />
           <span>Workers</span>
-        </NavLink>) 
+        </NavLink>
 
 
- (<NavLink to={`/employee-dashbord/workers-attendance`}
+ <NavLink to={`/employee-dashbord/workers-attendance`}
            className={ ({ isActive }) => `${isActive ? "bg-teal-500 " : " "}   flex items-center space-x-4 block py-2.5 px-4 rounded`}>
           <FaCalendarAlt />
           <span>Workers-Attendance</span>
-        </NavLink>) 
+        </NavLink>
 
 
         <NavLink to="/employee-dashbord/setting"
@@ -108,20 +108,6 @@ const SideBar = () => {
 }
 
 export default SideBar
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
