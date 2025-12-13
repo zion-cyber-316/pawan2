@@ -51,7 +51,7 @@ export const WorkerAttButtons = ({status,id,statusChange})=>{
   const markworker = async(status,id)=>{
 
 
-const res = await axios.put(`http://localhost:5000/api/workerAttendance/update/${id}`,{status})
+const res = await axios.put(`https://pawan2-back-end.onrender.com/api/workerAttendance/update/${id}`,{status})
 
 if(res.data.success){
   statusChange()
