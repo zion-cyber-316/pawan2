@@ -10,46 +10,11 @@ import { useAuth } from '../../Context/AuthContext';
 
 const SideBar = () => {
 
-  const { serverLink } = useAuth();   // ✅ serverLink yahin se aayega
+  const { serverLink,user } = useAuth();   // ✅ serverLink yahin se aayega
 
-  const [user, setUser] = useState(null);   // ✅ null se start
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const userVerify = async () => {
-      try {
-        const token = localStorage.getItem("token");
 
-        if (!token) {
-          setUser(null);
-          return;
-        }
-
-        const response = await axios.get(
-          `${serverLink}/auth/verify`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
-
-        if (response.data?.success) {
-          setUser(response.data.user);
-        } else {
-          setUser(null);
-        }
-
-      } catch (error) {
-        console.log("Auth verify error:", error);
-        setUser(null);
-      } finally {
-        setLoading(false);   // ✅ loading always stop
-      }
-    };
-
-    userVerify();
-  }, [serverLink]);
 
   // ✅ Loader (VERY IMPORTANT)
   if (loading) {
