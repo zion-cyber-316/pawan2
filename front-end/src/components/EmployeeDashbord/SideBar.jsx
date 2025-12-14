@@ -1,116 +1,169 @@
-
-import React, { useState } from 'react'
-
-import { AiFillAmazonCircle, AiFillCalendar } from "react-icons/ai";
-import { IoIosPeople } from "react-icons/io";
-import { GiMoneyStack } from "react-icons/gi";
-import { FaBuilding, FaCalendar, FaCalendarAlt, FaMoneyBill, FaMoneyBillWave, FaTachometerAlt, FaUsers } from "react-icons/fa";
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useAuth } from '../../Context/AuthContext';
-import { useEffect } from 'react';
 import axios from 'axios';
 
+import { FaTachometerAlt, FaUsers, FaBuilding, FaMoneyBillWave, FaCalendarAlt } from "react-icons/fa";
+import { IoIosPeople } from "react-icons/io";
+import { GiMoneyStack } from "react-icons/gi";
 
-
+import { useAuth } from '../../Context/AuthContext';
 
 const SideBar = () => {
-const {user} = useAuth()
 
+  const { serverLink } = useAuth();   // ✅ serverLink yahin se aayega
 
+  const [user, setUser] = useState(null);   // ✅ null se start
+  const [loading, setLoading] = useState(true);
 
-  
+  useEffect(() => {
+    const userVerify = async () => {
+      try {
+        const token = localStorage.getItem("token");
 
+        if (!token) {
+          setUser(null);
+          return;
+        }
+
+        const response = await axios.get(
+          `${serverLink}/auth/verify`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        if (response.data?.success) {
+          setUser(response.data.user);
+        } else {
+          setUser(null);
+        }
+
+      } catch (error) {
+        console.log("Auth verify error:", error);
+        setUser(null);
+      } finally {
+        setLoading(false);   // ✅ loading always stop
+      }
+    };
+
+    userVerify();
+  }, [serverLink]);
+
+  // ✅ Loader (VERY IMPORTANT)
+  if (loading) {
+    return (
+      <div className="bg-gray-800 text-white h-screen w-64 flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
+  // ✅ Safety Guard
+  if (!user) {
+    return null; // ya Navigate to /login
+  }
 
   return (
-    <div className='bg-gray-800 text-white h-screen fixed left-0 top-0 bottom-0 space-y-2 w-64'>
-      <div className='bg-teal-600 h-12 flex items-center justify-center'>
-        <h1 className='text-2xl text-center'>Empolyee Ms</h1>
+    <div className="bg-gray-800 text-white h-screen fixed left-0 top-0 w-64 space-y-2">
+
+      <div className="bg-teal-600 h-12 flex items-center justify-center">
+        <h1 className="text-xl">Employee MS</h1>
       </div>
-      <div>
-        
-        <NavLink to="/employee-dashbord"
-          className={({ isActive }) => `${isActive ? "bg-teal-500 " : " "}  flex items-center space-x-4 block py-2.5 px-4 rounded`}
-          end>
-          <FaTachometerAlt />
-          <span>Dashbord</span>
-        </NavLink>
 
+      {/* Dashboard */}
+      <NavLink
+        to="/employee-dashbord"
+        end
+        className={({ isActive }) =>
+          `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5 px-4 rounded`
+        }
+      >
+        <FaTachometerAlt />
+        <span>Dashboard</span>
+      </NavLink>
 
+      {/* Profile */}
+      <NavLink
+        to={`/employee-dashbord/profile/${user._id}`}
+        className={({ isActive }) =>
+          `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5 px-4 rounded`
+        }
+      >
+        <FaUsers />
+        <span>My Profile</span>
+      </NavLink>
 
+      {/* Leaves */}
+      <NavLink
+        to="/employee-dashbord/leaves"
+        className={({ isActive }) =>
+          `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5 px-4 rounded`
+        }
+      >
+        <FaBuilding />
+        <span>Leaves</span>
+      </NavLink>
 
-       
+      {/* Salary */}
+      <NavLink
+        to={`/employee-dashbord/salary/${user._id}`}
+        className={({ isActive }) =>
+          `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5 px-4 rounded`
+        }
+      >
+        <FaMoneyBillWave />
+        <span>Salary</span>
+      </NavLink>
 
+      {/* Purchase */}
+      <NavLink
+        to="/employee-dashbord/purchase"
+        className={({ isActive }) =>
+          `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5 px-4 rounded`
+        }
+      >
+        <GiMoneyStack />
+        <span>Purchase</span>
+      </NavLink>
 
-    
+      {/* Workers */}
+      <NavLink
+        to="/employee-dashbord/workers"
+        className={({ isActive }) =>
+          `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5 px-4 rounded`
+        }
+      >
+        <IoIosPeople />
+        <span>Workers</span>
+      </NavLink>
 
-         <NavLink to= {`/employee-dashbord/profile/${user._id}`}
-          className={ ({ isActive }) => `${isActive ? "bg-teal-500 " : " "}   flex items-center space-x-4 block py-2.5 px-4 rounded`}>
-          <FaUsers />
-          <span>My Profle</span>
-        </NavLink>
+      {/* Workers Attendance */}
+      <NavLink
+        to="/employee-dashbord/workers-attendance"
+        className={({ isActive }) =>
+          `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5 px-4 rounded`
+        }
+      >
+        <FaCalendarAlt />
+        <span>Workers Attendance</span>
+      </NavLink>
 
-    <NavLink to="/employee-dashbord/leaves"
-          className={({ isActive }) => `${isActive ? "bg-teal-500 " : " "}  flex items-center space-x-4 block py-2.5 px-4 rounded`}>
-          <FaBuilding />
-          <span>Leaves</span>
-        </NavLink>
-        
-
-
-
-
-
-
-
-     
-
-
-        <NavLink to={`/employee-dashbord/salary/${user._id}`}
+ <NavLink to="/employee-dashbord/setting"
            className={ ({ isActive }) => `${isActive ? "bg-teal-500 " : " "}   flex items-center space-x-4 block py-2.5 px-4 rounded`}>
-          <FaMoneyBillWave />
-          <span>Salary</span>
-        </NavLink>
-
- <NavLink to="/employee-dashbord/purchase"
-          className={({ isActive }) => `${isActive ? "bg-teal-500 " : " "}  flex items-center space-x-4 block py-2.5 px-4 rounded`}>
-          < GiMoneyStack />
-          <span> Purchase </span>
-        </NavLink>
-        
-   
-        
-
-  <NavLink to={`/employee-dashbord/workers`}
-           className={ ({ isActive }) => `${isActive ? "bg-teal-500 " : " "}   flex items-center space-x-4 block py-2.5 px-4 rounded`}>
-          <IoIosPeople />
-          <span>Workers</span>
-        </NavLink>
-
-
- <NavLink to={`/employee-dashbord/workers-attendance`}
-           className={ ({ isActive }) => `${isActive ? "bg-teal-500 " : " "}   flex items-center space-x-4 block py-2.5 px-4 rounded`}>
-          <FaCalendarAlt />
-          <span>Workers-Attendance</span>
-        </NavLink>
-
-
-        <NavLink to="/employee-dashbord/setting"
-           className={ ({ isActive }) => `${isActive ? "bg-teal-500 " : " "}   flex items-center space-x-4 block py-2.5 px-4 rounded`}>
-          <FaTachometerAlt />
+           <FaTachometerAlt />
           <span>Setting</span>
         </NavLink>
 
 
-      </div>
+      
+
     </div>
-   
-  )
-}
+  );
+};
 
-export default SideBar
-
-
-
+export default SideBar;
 
 
 
